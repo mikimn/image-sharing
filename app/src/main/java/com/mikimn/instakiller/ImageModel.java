@@ -27,4 +27,14 @@ public class ImageModel {
     public boolean isPublicImage() {
         return publicImage;
     }
+
+    public ImageModel() {
+    }
+
+    public ImageModel(String storageRef, String uploaderId, boolean publicImage) {
+        this.createdAt = Timestamp.now();
+        this.storageRef = storageRef;
+        this.uploaderId = uploaderId;
+        this.publicImage = publicImage;
+    }
 }
