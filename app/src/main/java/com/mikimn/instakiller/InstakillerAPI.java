@@ -47,13 +47,23 @@ public class InstakillerAPI {
 
     public void uploadImage(File imageFile, boolean isPublic, final Callback<ImageModel> callback) {
 
-        try (InputStream stream = new FileInputStream(imageFile)) {
-            final StorageReference storageReference = storage.getReference("images").child(imageFile.getName());
+        InputStream stream;
+        try {
+            stream = new FileInputStream(imageFile);
+            final StorageReference storageReference = storage.getReference().child(imageFile.getName());
+            String fileName = imageFile.getName();
+            int dotIndex = fileName.lastIndexOf(".");
+            String resizedFileName = fileName.substring(0, dotIndex) + "_256x256" + fileName.substring(dotIndex);
 
             storageReference.putStream(stream)
                     .continueWithTask(task -> storageReference.getDownloadUrl())
                     .addOnSuccessListener(uri -> {
-                        ImageModel model = new ImageModel(storageReference.getPath(), "Miki Mints", isPublic);
+                        try {
+                            stream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        ImageModel model = new ImageModel(resizedFileName, "Miki Mints", isPublic);
                         db.collection("images")
                                 .add(model)
                                 .addOnSuccessListener(documentReference -> callback.onResult(model))

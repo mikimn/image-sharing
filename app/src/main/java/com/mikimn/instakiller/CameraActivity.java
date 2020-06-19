@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Size;
 import android.view.Surface;
 import android.view.View;
 
@@ -111,7 +112,7 @@ public class CameraActivity extends AppCompatActivity {
                         .build();
 
                 imageAnalysis = new ImageAnalysis.Builder()
-                        .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                        .setTargetResolution(new Size(720, 720))
                         .setTargetRotation(Surface.ROTATION_0)
                         .build();
 
@@ -149,7 +150,7 @@ public class CameraActivity extends AppCompatActivity {
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                        api.uploadImage(imageFile, postOnlineSwitch.isActivated(), object -> {
+                        api.uploadImage(imageFile, postOnlineSwitch.isChecked(), object -> {
                             Snackbar.make(previewView, "Successfully uploaded image!", Snackbar.LENGTH_LONG);
                             finish();
                         });

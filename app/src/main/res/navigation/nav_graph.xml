@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.mikimn.instakiller.SecondFragment"
+        android:name="com.mikimn.instakiller.PrivateFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 

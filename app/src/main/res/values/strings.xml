@@ -14,4 +14,6 @@
     <string name="take_picture_button">Take Picture</string>
     <string name="close_button">Close</string>
     <string name="post_online">Post online</string>
+    <string name="my_feed">My Feed</string>
+    <string name="private_photos">Private Photos</string>
 </resources>

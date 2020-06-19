@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
@@ -21,6 +22,7 @@ import java.util.Locale;
 
 public class FeedFragment extends Fragment {
 
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private FirebaseStorage publicStorage = FirebaseStorage.getInstance();
     private List<ImageModel> images;
@@ -31,17 +33,26 @@ public class FeedFragment extends Fragment {
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        refreshLayout = view.findViewById(R.id.feed_refresh_layout);
         recyclerView = view.findViewById(R.id.feed_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        refreshLayout.setOnRefreshListener(this::loadImages);
         return view;
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    private void loadImages() {
         InstakillerAPI.instance().getPublicImages(images -> {
             this.images = images;
             recyclerView.setAdapter(new FeedAdapter());
+            refreshLayout.setRefreshing(false);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshLayout.setRefreshing(true);
+        loadImages();
     }
 
     private class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
